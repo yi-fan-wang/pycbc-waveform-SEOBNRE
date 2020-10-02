@@ -19,7 +19,7 @@
 #include <math.h>
 
 #define debugOutput 0
-#define outputh22 1
+#define outputh22 0
 #define outputOmega 1
 /* Function Declaration */
 

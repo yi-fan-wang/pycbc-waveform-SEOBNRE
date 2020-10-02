@@ -216,7 +216,7 @@ void genwaveform (double * outhp,double * outhc, double * t0, int * datalength, 
     
     m1 = m1 * LAL_MSUN_SI;
     m2 = m2 * LAL_MSUN_SI;
-    distance = distance * 1e6 * LAL_PC_SI;
+    distance = distance * 1.e6 * LAL_PC_SI;
     // in Panyi_elip.cpp 
     XLALSimInspiralChooseTDWaveform(&hplus, &hcross, phiRef, 
                     deltaT, m1, m2, 0, 

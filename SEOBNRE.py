@@ -4,7 +4,7 @@ from pycbc.types import TimeSeries,FrequencySeries
 import os
 def SEOBNRE_td(**kwargs):
 
-    lib = CDLL('$LD_LIBRARY_PATH/libSEOBNREv1.so')
+    lib = CDLL('$LD_LIBRARY_PATH/libSEOBNRE.so')
 
     waveform_generation = lib.genwaveform
     waveform_generation.argtypes = [POINTER(c_double), POINTER(c_double),POINTER(c_double),POINTER(c_int),c_double, c_double,c_double, c_double,c_double, c_double,c_double, c_double,c_double, c_double]
@@ -14,6 +14,7 @@ def SEOBNRE_td(**kwargs):
     for value in params:
         if value in kwargs:
             params[value] = kwargs[value]
+    params['coa_phase'] = params['coa_phase']
 
     # TODO: avoid this ugly method
     # Initilization
