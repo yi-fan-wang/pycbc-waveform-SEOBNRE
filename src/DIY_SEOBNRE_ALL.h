@@ -56,7 +56,6 @@ typedef uint64_t UINT8;        /**< Eight-byte unsigned integer; on some platfor
 
 #define LALFree(p) free(p)
 
-
 typedef struct tagGSParams {
     int ampO;                 /**< twice PN order of the amplitude */
     REAL8 phiRef;             /**< phase at fRef */
@@ -1119,7 +1118,8 @@ int XLALSimInspiralChooseTDWaveform(
                                     REAL8 f_min,                                /**< starting GW frequency (Hz) */
                                     REAL8 e0,                                   /**< eccentricity at starting GW frequency (Hz) */
                                     REAL8 r,                                    /**< distance of source (m) */
-                                    REAL8 i,                                   /**< inclination of source (rad) */
+                                    REAL8 i,                                    /**< inclination of source (rad) */
+                                    REAL8 longAscNodes,                   /**< longitude of ascending nodes, degenerate with the polarization angle, Omega in documentation */
                                     char *jobtag
 );
 

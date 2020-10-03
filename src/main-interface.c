@@ -208,7 +208,9 @@ int dump_convertTD(GSParams *params, REAL8TimeSeries *hplus, REAL8TimeSeries *hc
     return 0;
 }
 
-void genwaveform (double * outhp,double * outhc, double * t0, int * datalength, double phiRef, double deltaT, double m1, double m2, double s1z, double s2z, double f_min, double e0, double distance, double inclination) {
+void genwaveform (double * outhp,double * outhc, double * t0, int * datalength,\
+    double phiRef, double deltaT, double m1, double m2, double s1z, double s2z,\
+    double f_min, double e0, double distance, double inclination, double longAscNodes) {
 
     REAL8TimeSeries *hplus = NULL;
     REAL8TimeSeries *hcross = NULL;
@@ -222,7 +224,7 @@ void genwaveform (double * outhp,double * outhc, double * t0, int * datalength, 
                     deltaT, m1, m2, 0, 
                     0, s1z, 0, 0,  
                     s2z, f_min, e0, 
-                    distance, inclination, "None"
+                    distance, inclination, longAscNodes, "None"
                     );
     //printf("%d\n",hplus->data->length);
 
@@ -323,6 +325,7 @@ int XLALSimInspiralChooseTDWaveform(
                                     REAL8 e0,                                   /**< eccentricity at starting GW frequency (Hz) */
                                     REAL8 r,                                    /**< distance of source (m) */
                                     REAL8 i,                                    /**< inclination of source (rad) */
+                                    REAL8 longAscNodes,                   /**< longitude of ascending nodes, degenerate with the polarization angle, Omega in documentation */
                                     char *jobtag
 )
 {
@@ -365,11 +368,26 @@ int XLALSimInspiralChooseTDWaveform(
     if( e0 < 0 || e0 > 1 )
         fprintf(stderr,"XLAL Warning - : unphysical e0 = %e.\n", e0);
     
-    
-    
+    /*
+    REAL8 polariz=longAscNodes;
+    polariz+=-LAL_PI/2.;
+    */
     /* Call the waveform driver routine */
     ret = XLALSimSEOBNRE(hplus, hcross, phiRef,
                          deltaT, m1, m2, f_min, e0, r, i, S1z, S2z, jobtag); // in current file
     
+    /*
+    if (polariz && (*hplus) && (*hcross) ) {
+      REAL8 tmpP,tmpC;
+      REAL8 cp=cos(2.*polariz);
+      REAL8 sp=sin(2.*polariz);
+      for (UINT4 idx=0;idx<(*hplus)->data->length;idx++) {
+        tmpP=(*hplus)->data->data[idx];
+        tmpC=(*hcross)->data->data[idx];
+        (*hplus)->data->data[idx] =cp*tmpP+sp*tmpC;
+        (*hcross)->data->data[idx]=cp*tmpC-sp*tmpP;
+      }
+    }*/
+
     return ret;
 }
