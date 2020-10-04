@@ -13,7 +13,7 @@ def SEOBNRE_td(**kwargs):
 
     params = {'coa_phase': 0.0,'delta_t': None,'mass1': None,'mass2': None,\
     'spin1z': 0.0,'spin2z': 0.0,'f_lower': None, 'eccentricity': 0.0,'distance': 1.0,'inclination': 0.0,\
-    'longAscNodes': 0.0}
+    'long_asc_nodes': 0.0}
     for value in params:
         if value in kwargs:
             params[value] = kwargs[value]
@@ -31,7 +31,7 @@ def SEOBNRE_td(**kwargs):
     waveform_generation(hplus.ctypes.data_as(POINTER(c_double)),hcross.ctypes.data_as(POINTER(c_double)),
         t0.ctypes.data_as(POINTER(c_double)),truesize.ctypes.data_as(POINTER(c_int)),
         params['coa_phase'],params['delta_t'],params['mass1'],params['mass2'],params['spin1z'],
-        params['spin2z'],params['f_lower'],params['eccentricity'],params['distance'],params['inclination'],params['longAscNodes'])
+        params['spin2z'],params['f_lower'],params['eccentricity'],params['distance'],params['inclination'],params['long_asc_nodes'])
 
     hplus = hplus[:truesize[0]]
     hcross = hcross[:truesize[0]]

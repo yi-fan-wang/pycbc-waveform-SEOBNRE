@@ -9,7 +9,7 @@ import pylab
 longAscNodes = 0
 eccentricity = 0 
 meanPerAno = 0
-approx=lalsim.SEOBNRv4
+approx=lalsim.SEOBNRv1
 nonGRdict = lal.CreateDict()
 m1 = 30
 m2 = 30
@@ -18,10 +18,10 @@ s2 = [0,0,0]#[-0.1,0.8,0]
 dist = 400.
 #iota = np.pi*0.4
 iota = 0.
-phiRef = 0.
+phiRef = 0
 deltaT = 1./4096/4
 f_ref = 0
-f_low = 40
+f_low = 30
 
 
 for apx in ['SEOBNRE']:
@@ -32,7 +32,8 @@ for apx in ['SEOBNRE']:
                                  eccentricity = 0,
                                  distance = dist,
                                  coa_phase = phiRef,
-                                 f_lower=f_low)
+                                 f_lower=f_low,
+                                 longAscNodes = longAscNodes)
 
     pylab.plot(hp.sample_times, hp, label='hplus:'+apx)
 

@@ -73,6 +73,7 @@ typedef struct tagGSParams {
     REAL8 s2x;                /**< (x,y,z) component ofs spin of m2 body */
     REAL8 s2y;                /**< z-axis along line of sight, L in x-z plane */
     REAL8 s2z;                /**< dimensionless spin, Kerr bound: |s2| <= 1 */
+    REAL8 longAscNodes; 
     int output;               /**< out put to file or not(0 if do not write to file) */
     char outname[256];        /**< file to which output should be written */
     int ampPhase;

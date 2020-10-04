@@ -19,7 +19,7 @@
 #include <math.h>
 
 #define debugOutput 0
-#define outputh22 0
+#define outputh22 1
 #define outputOmega 1
 /* Function Declaration */
 
@@ -1156,7 +1156,7 @@ int XLALSimSEOBNRE(
     /* TODO change to using XLALSimAddMode function to combine modes */
     /* For now, calculate -2Y22 * h22 + -2Y2-2 * h2-2 directly (all terms complex) */
     /* Compute spin-weighted spherical harmonics and generate waveform */
-    REAL8 coa_phase = 0.0;
+    REAL8 coa_phase = phiC;
     
     MultSphHarmP = XLALSpinWeightedSphericalHarmonic( inc, coa_phase, -2, 2, 2 ); // -2Y22(inc, coa_phase)
     MultSphHarmM = XLALSpinWeightedSphericalHarmonic( inc, coa_phase, -2, 2, -2 ); // -2Y2-2(inc, coa_phase)
@@ -1164,8 +1164,8 @@ int XLALSimSEOBNRE(
     y_1 =   creal(MultSphHarmP) + creal(MultSphHarmM);
     y_2 =   cimag(MultSphHarmM) - cimag(MultSphHarmP) ;
     z1 = -  cimag(MultSphHarmM) - cimag(MultSphHarmP) ;
-    z2 =    creal(MultSphHarmM) - creal(MultSphHarmP);
-    
+    z2 =    creal(MultSphHarmM) - creal(MultSphHarmP);  
+
     for ( i = 0; i < (INT4)sigReVec->length; i++ )
     {
         REAL8 x1 = sigReVec->data[i];

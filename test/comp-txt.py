@@ -13,7 +13,9 @@ for apx in ['SEOBNRE']:
                                  delta_t=1.0/4096,
                                  eccentricity = 0,
                                  distance = 400,
-                                 f_lower=40)
+                                 f_lower=40,
+                                 coa_phase = 0,
+                                 longAscNodes = 0)
 
     pylab.plot(hp.sample_times, hp, label=apx)
 

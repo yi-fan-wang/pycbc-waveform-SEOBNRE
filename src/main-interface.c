@@ -61,6 +61,7 @@ const char * usage =
 "--e0 e0                    eccentricity at FMIN (default 0)\n"
 "--distance D               Distance in Mpc (default 100)\n"
 //"--axis AXIS                for PhenSpin: 'View' (default), 'TotalJ', 'OrbitalL'\n"
+"--longAscNodes             Longitude of ascending nodes, degenerate with the polarization angle, Omega in documentation\n"
 "--output                   Do not out put to file\n"
 "--outname FNAME            Output to file FNAME (default 'simulation.dat')\n"
 "--verbose                  If included, add verbose output\n"
@@ -95,6 +96,7 @@ GSParams *parse_args(unsigned int argc, char **argv) {
     params->s2x = 0.;
     params->s2y = 0.;
     params->s2z = 0.;
+    params->longAscNodes = 0.;
     params->verbose = 0; /* No verbosity */
     params->output = 1;
     strncpy(params->outname, "simulation.dat", 256); /* output to this file */
@@ -149,6 +151,8 @@ GSParams *parse_args(unsigned int argc, char **argv) {
             params->verbose = 1;
         } else if (strcmp(argv[i], "--jobtag") == 0) {
             strncpy(params->jobtag, argv[++i], 256);
+        } else if (strcmp(argv[i], "--longAscNodes") == 0) {
+            params->longAscNodes = atof(argv[++i]);
         } else {
             fprintf(stderr,"Error: invalid option: %s\n", argv[i]);
             goto fail;
@@ -210,7 +214,7 @@ int dump_convertTD(GSParams *params, REAL8TimeSeries *hplus, REAL8TimeSeries *hc
 
 void genwaveform (double * outhp,double * outhc, double * t0, int * datalength,\
     double phiRef, double deltaT, double m1, double m2, double s1z, double s2z,\
-    double f_min, double e0, double distance, double inclination, double longAscNodes) {
+    double f_min, double e0, double distance, double inclination, double long_asc_nodes) {
 
     REAL8TimeSeries *hplus = NULL;
     REAL8TimeSeries *hcross = NULL;
@@ -224,7 +228,7 @@ void genwaveform (double * outhp,double * outhc, double * t0, int * datalength,\
                     deltaT, m1, m2, 0, 
                     0, s1z, 0, 0,  
                     s2z, f_min, e0, 
-                    distance, inclination, longAscNodes, "None"
+                    distance, inclination, long_asc_nodes, "None"
                     );
     //printf("%d\n",hplus->data->length);
 
@@ -372,6 +376,7 @@ int XLALSimInspiralChooseTDWaveform(
     REAL8 polariz=longAscNodes;
     polariz+=-LAL_PI/2.;
     */
+
     /* Call the waveform driver routine */
     ret = XLALSimSEOBNRE(hplus, hcross, phiRef,
                          deltaT, m1, m2, f_min, e0, r, i, S1z, S2z, jobtag); // in current file
@@ -387,7 +392,50 @@ int XLALSimInspiralChooseTDWaveform(
         (*hplus)->data->data[idx] =cp*tmpP+sp*tmpC;
         (*hcross)->data->data[idx]=cp*tmpC-sp*tmpP;
       }
-    }*/
-
+    }
+    */
+    
     return ret;
+}
+
+int main (int argc , char **argv) {
+
+    FILE *f;
+
+    int start_time;
+    REAL8TimeSeries *hplus = NULL;
+    REAL8TimeSeries *hcross = NULL;
+    GSParams *params;
+
+    /* parse commandline */
+    params = parse_args(argc, argv);
+    
+    /* generate waveform */
+    start_time = time(NULL);
+
+    // in Panyi_elip.cpp 
+    XLALSimInspiralChooseTDWaveform(&hplus, &hcross, params->phiRef, 
+                    params->deltaT, params->m1, params->m2, params->s1x, 
+                    params->s1y, params->s1z, params->s2x, params->s2y, 
+                    params->s2z, params->f_min, params->e0, 
+                    params->distance, params->inclination, params->longAscNodes, params->jobtag
+                    );
+          
+    if (params->verbose)
+        fprintf(stderr,"Generation took %.0f seconds\n",
+                difftime(time(NULL), start_time));
+
+    /* dump file */
+    if(params->output)
+    {
+      f = fopen(params->outname, "w");
+      dump_TD(f, hplus, hcross);
+      fclose(f);
+    }
+    else
+    {
+        output_waveform(hplus, hcross, params->ampPhase);
+    }
+
+    return 1;
 }
