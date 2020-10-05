@@ -24,7 +24,7 @@ f_ref = 0
 f_low = 30
 
 
-for apx in ['SEOBNRE']:
+for apx in ['SEOBNRv1']:
     hp, hc = get_td_waveform(approximant=apx,
                                  mass1=m1,
                                  mass2=m2,

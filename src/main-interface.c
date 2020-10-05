@@ -372,16 +372,16 @@ int XLALSimInspiralChooseTDWaveform(
     if( e0 < 0 || e0 > 1 )
         fprintf(stderr,"XLAL Warning - : unphysical e0 = %e.\n", e0);
     
-    /*
+    
     REAL8 polariz=longAscNodes;
-    polariz+=-LAL_PI/2.;
-    */
+    //polariz+=-LAL_PI/2.;
+    
 
     /* Call the waveform driver routine */
     ret = XLALSimSEOBNRE(hplus, hcross, phiRef,
                          deltaT, m1, m2, f_min, e0, r, i, S1z, S2z, jobtag); // in current file
     
-    /*
+    
     if (polariz && (*hplus) && (*hcross) ) {
       REAL8 tmpP,tmpC;
       REAL8 cp=cos(2.*polariz);
@@ -393,7 +393,6 @@ int XLALSimInspiralChooseTDWaveform(
         (*hcross)->data->data[idx]=cp*tmpC-sp*tmpP;
       }
     }
-    */
     
     return ret;
 }
